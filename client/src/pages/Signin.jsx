@@ -1,12 +1,17 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useDispatch, useSelector} from "react-redux"
-import { signInStart, signInSuccess, signInFaliure } from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFaliure,
+} from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const {loading, error: errorMessage} = useSelector(state => state.user)
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -15,7 +20,7 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.password || !formData.email) {
-      return dispatch(signInFaliure('Please fill in all fields'))
+      return dispatch(signInFaliure("Please fill in all fields"));
     }
     try {
       dispatch(signInStart());
@@ -25,17 +30,17 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console. log(JSON. stringify(data))
+      console.log(JSON.stringify(data));
       if (data.success === false) {
         dispatch(signInFaliure(data.message));
       }
 
       if (res.ok) {
-        dispatch(signInSuccess(data))
+        dispatch(signInSuccess(data));
         navigate("/");
       }
     } catch (error) {
-      dispatch(signInFaliure(error.message))
+      dispatch(signInFaliure(error.message));
     }
   };
   return (
@@ -92,6 +97,7 @@ export default function SignIn() {
                 "Sign In"
               )}
             </Button>
+            <OAuth />
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Don&#39;t have an account?</span>
